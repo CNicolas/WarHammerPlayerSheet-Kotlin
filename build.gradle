@@ -28,7 +28,7 @@ dependencies {
     compile "org.jetbrains.exposed:exposed:0.9.1"
     compile "com.h2database:h2:1.0.60"
     compile "org.xerial:sqlite-jdbc:3.21.0"
-    compile files("./lib/warhammer-dicelauncher.jar")
+    compile files("./lib/warhammer-dice-launcher.jar")
     compile files("./lib/warhammer-database.jar")
 
     testCompile "org.testng:testng:6.11"
