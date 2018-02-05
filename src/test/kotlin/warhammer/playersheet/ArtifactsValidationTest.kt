@@ -23,7 +23,7 @@ class ArtifactsValidationTest {
         val handName = "NiceOne"
         val hand = Hand(name = handName, characteristicDicesCount = 6, expertiseDicesCount = 6, fortuneDicesCount = 6)
 
-        assertThat(launchHand(hand).faces.size).isEqualTo(18)
+        assertThat(launchHand(hand).faces.size).isGreaterThanOrEqualTo(18)
 
         val handService = HandService(handsDatabaseService)
         val savedHand = handService.add(hand)
