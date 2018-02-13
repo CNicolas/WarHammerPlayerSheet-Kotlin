@@ -25,8 +25,12 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:1.2.21"
 
-    compile files("./lib/warhammer-dice-launcher.jar")
-    compile files("./lib/warhammer-database.jar")
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.2.21"
+    compile "org.xerial:sqlite-jdbc:3.21.0"
+    compile "org.jetbrains.exposed:exposed:0.9.1"
+    compile files("lib/warhammer-database.jar")
+
+    compile files("lib/warhammer-dice-launcher.jar")
 
     testCompile "org.testng:testng:6.11"
     testCompile "org.assertj:assertj-core:3.8.0"

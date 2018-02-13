@@ -1,7 +1,7 @@
 package warhammer.playersheet
 
 import warhammer.database.entities.Hand
-import warhammer.database.entities.Player
-import warhammer.database.entities.characteristics.Characteristic
+import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.characteristics.Characteristic
 
-fun Player.createHand(characteristic: Characteristic, name: String = "Hand"): Hand = characteristics.getHand(characteristic, name)
+fun Player.createHand(characteristic: Characteristic, name: String = "Hand"): Hand = characteristics[characteristic].getHand(name)

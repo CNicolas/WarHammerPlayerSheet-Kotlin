@@ -3,10 +3,10 @@ package warhammer.playersheet.parts.player
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.entities.Player
-import warhammer.database.entities.characteristics.Characteristic.*
-import warhammer.database.entities.characteristics.CharacteristicValue
-import warhammer.database.entities.characteristics.PlayerCharacteristics
+import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.characteristics.Characteristic.*
+import warhammer.database.entities.player.characteristics.CharacteristicValue
+import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.services.PlayersDatabaseService
 import warhammer.playersheet.PlayerSheetContext
 
