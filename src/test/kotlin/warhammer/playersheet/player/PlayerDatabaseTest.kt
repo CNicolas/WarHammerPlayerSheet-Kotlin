@@ -1,4 +1,4 @@
-package warhammer.playersheet.parts.player
+package warhammer.playersheet.player
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
