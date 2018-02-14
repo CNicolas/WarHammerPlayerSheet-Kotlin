@@ -1,4 +1,4 @@
-package warhammer.playersheet
+package warhammer.playersheet.player.extensions
 
 import warhammer.database.entities.Hand
 import warhammer.database.entities.player.Player
@@ -10,7 +10,7 @@ fun Player.earnExperiencePoints(experiencePoints: Int): Player =
         this.copy(
                 state = state.copy(
                         career = state.career.copy(
-                                totalExperience = state.career.totalExperience!! + experiencePoints,
-                                availableExperience = state.career.totalExperience!! + experiencePoints)
+                                totalExperience = totalExperience + experiencePoints,
+                                availableExperience = totalExperience + experiencePoints)
                 )
         )

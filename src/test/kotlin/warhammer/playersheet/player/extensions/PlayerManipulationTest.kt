@@ -1,9 +1,8 @@
-package warhammer.playersheet.player
+package warhammer.playersheet.player.extensions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
-import warhammer.playersheet.earnExperiencePoints
 
 class PlayerManipulationTest {
     @Test

@@ -7,7 +7,7 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.characteristics.Characteristic.STRENGTH
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
-import warhammer.playersheet.createHand
+import warhammer.playersheet.player.extensions.createHand
 
 class PlayerHandTest {
     @Test
