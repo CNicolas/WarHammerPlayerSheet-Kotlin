@@ -24,8 +24,8 @@ class PlayerDatabaseTest {
         val fellowShipValue = CharacteristicValue(2)
         val intelligenceValue = CharacteristicValue(3, 2)
 
-        val playerCharacteristics = PlayerCharacteristics(strengthValue = strengthValue, fellowShipValue = fellowShipValue)
-        val player = Player("PlayerName", characteristics = playerCharacteristics)
+        val playerCharacteristics = PlayerCharacteristics(strength = strengthValue, fellowShip = fellowShipValue)
+        val player = Player(name = "PlayerName", characteristics = playerCharacteristics)
 
         playersDatabaseService.deleteAll()
 
@@ -36,9 +36,9 @@ class PlayerDatabaseTest {
         assertThat(savedPlayer.characteristics[FELLOWSHIP]).isEqualToComparingFieldByField(fellowShipValue)
         assertThat(savedPlayer.characteristics[INTELLIGENCE]).isEqualToComparingFieldByField(CharacteristicValue(0))
 
-        val updatePlayerCharacteristics = PlayerCharacteristics(strengthValue = strengthValue,
-                fellowShipValue = fellowShipValue,
-                intelligenceValue = intelligenceValue)
+        val updatePlayerCharacteristics = PlayerCharacteristics(strength = strengthValue,
+                fellowShip = fellowShipValue,
+                intelligence = intelligenceValue)
         val updatedPlayer = playersDatabaseService.update(savedPlayer.copy(characteristics = updatePlayerCharacteristics))
         assertThat(updatedPlayer).isNotNull()
         assertThat(updatedPlayer?.name).isEqualTo("PlayerName")

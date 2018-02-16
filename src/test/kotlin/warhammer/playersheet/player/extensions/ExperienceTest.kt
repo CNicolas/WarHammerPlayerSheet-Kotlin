@@ -4,10 +4,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
 
-class PlayerManipulationTest {
+class ExperienceTest {
     @Test
     fun should_earn_an_experience_point() {
-        var player = Player("PlayerName")
+        var player = Player(name = "PlayerName")
 
         assertThat(player.totalExperience).isEqualTo(0)
         assertThat(player.availableExperience).isEqualTo(0)

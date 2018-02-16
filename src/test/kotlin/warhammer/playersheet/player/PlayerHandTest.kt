@@ -12,8 +12,8 @@ import warhammer.playersheet.player.extensions.createHand
 class PlayerHandTest {
     @Test
     fun should_create_strength_hand_from_player() {
-        val playerCharacteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3, 1))
-        val player = Player("PlayerName", characteristics = playerCharacteristics)
+        val playerCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(3, 1))
+        val player = Player(name = "PlayerName", characteristics = playerCharacteristics)
 
         val hand: Hand = player.createHand(STRENGTH, "Hand")
         assertThat(hand).isNotNull()
