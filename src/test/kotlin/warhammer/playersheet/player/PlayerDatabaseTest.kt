@@ -4,18 +4,28 @@ import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.characteristics.Characteristic.*
+import warhammer.database.entities.player.PlayerInventory
+import warhammer.database.entities.player.PlayerState
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
+import warhammer.database.entities.player.inventory.Money
+import warhammer.database.entities.player.inventory.item.Weapon
+import warhammer.database.entities.player.inventory.item.enums.Quality
+import warhammer.database.entities.player.state.Career
+import warhammer.database.entities.player.state.Stance
 import warhammer.database.services.PlayersDatabaseService
 import warhammer.playersheet.PlayerSheetContext
+import warhammer.playersheet.player.extensions.findItemByName
+import warhammer.playersheet.player.extensions.setAutomaticFields
+import warhammer.playersheet.player.extensions.updateItemByName
+import warhammer.playersheet.player.services.PlayerService
 
 class PlayerDatabaseTest {
-    private val playersDatabaseService = PlayersDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
+    private val playerService = PlayerService(PlayersDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER))
 
     @BeforeMethod
     fun clearDatabase() {
-        playersDatabaseService.deleteAll()
+        playerService.deleteAll()
     }
 
     @Test
@@ -24,35 +34,73 @@ class PlayerDatabaseTest {
         val fellowShipValue = CharacteristicValue(2)
         val intelligenceValue = CharacteristicValue(3, 2)
 
-        val playerCharacteristics = PlayerCharacteristics(strength = strengthValue, fellowShip = fellowShipValue)
-        val player = Player(name = "PlayerName", characteristics = playerCharacteristics)
+        val stance = Stance(maxReckless = 3)
+        val career = Career(name = "Wizard", rank = 2)
 
-        playersDatabaseService.deleteAll()
+        val weapon = Weapon(name = "Sword", encumbrance = 3, damage = 4, criticalLevel = 3, quality = Quality.NORMAL)
+        val money = Money(1, 2, 3)
 
-        val savedPlayer = playersDatabaseService.add(player)
+        val player = Player(
+                name = "PlayerName",
+                characteristics = PlayerCharacteristics(
+                        strength = strengthValue,
+                        fellowShip = fellowShipValue,
+                        intelligence = intelligenceValue),
+                state = PlayerState(
+                        maxStress = 6,
+                        stance = stance,
+                        career = career
+                ),
+                inventory = PlayerInventory(
+                        money = money,
+                        items = listOf(weapon)
+                )
+        ).setAutomaticFields()
+
+        val savedPlayer = playerService.add(player)
         assertThat(savedPlayer).isNotNull()
-        assertThat(savedPlayer?.name).isEqualTo("PlayerName")
-        assertThat(savedPlayer?.characteristics!![STRENGTH]).isEqualToComparingFieldByField(strengthValue)
-        assertThat(savedPlayer.characteristics[FELLOWSHIP]).isEqualToComparingFieldByField(fellowShipValue)
-        assertThat(savedPlayer.characteristics[INTELLIGENCE]).isEqualToComparingFieldByField(CharacteristicValue(0))
+        assertThat(savedPlayer!!.name).isEqualTo("PlayerName")
+        assertThat(savedPlayer.strength).isEqualToComparingFieldByField(strengthValue)
+        assertThat(savedPlayer.fellowship).isEqualToComparingFieldByField(fellowShipValue)
+        assertThat(savedPlayer.intelligence).isEqualToComparingFieldByField(intelligenceValue)
+        assertThat(savedPlayer.maxReckless).isEqualTo(3)
+        assertThat(savedPlayer.careerName).isEqualTo("Wizard")
+        assertThat(savedPlayer.rank).isEqualTo(2)
+        assertThat(savedPlayer.money.gold).isEqualTo(3)
+        assertThat(savedPlayer.inventory.findItemByName("Sword")?.damage).isEqualTo(4)
 
-        val updatePlayerCharacteristics = PlayerCharacteristics(strength = strengthValue,
-                fellowShip = fellowShipValue,
-                intelligence = intelligenceValue)
-        val updatedPlayer = playersDatabaseService.update(savedPlayer.copy(characteristics = updatePlayerCharacteristics))
+        val updatePlayerCharacteristics = savedPlayer.characteristics.copy(
+                intelligence = CharacteristicValue(0)
+        )
+        val updatePlayerInventory = savedPlayer.inventory
+                .updateItemByName(weapon.name, weapon.copy(damage = 5))
+                .copy(money = money.copy(gold = 2))
+        val updatePlayerState = savedPlayer.state.copy(
+                stance = stance.copy(maxReckless = 2),
+                career = career.copy(rank = 3)
+        )
+        val updatedPlayer = playerService.update(savedPlayer.copy(
+                characteristics = updatePlayerCharacteristics,
+                state = updatePlayerState,
+                inventory = updatePlayerInventory
+        ))
         assertThat(updatedPlayer).isNotNull()
-        assertThat(updatedPlayer?.name).isEqualTo("PlayerName")
-        assertThat(updatedPlayer?.characteristics!![STRENGTH]).isEqualToComparingFieldByField(strengthValue)
-        assertThat(updatedPlayer.characteristics[FELLOWSHIP]).isEqualToComparingFieldByField(fellowShipValue)
-        assertThat(updatedPlayer.characteristics[INTELLIGENCE]).isEqualToComparingFieldByField(intelligenceValue)
+        assertThat(updatedPlayer!!.name).isEqualTo("PlayerName")
+        assertThat(updatedPlayer.strength).isEqualToComparingFieldByField(strengthValue)
+        assertThat(updatedPlayer.fellowship).isEqualToComparingFieldByField(fellowShipValue)
+        assertThat(updatedPlayer.intelligence).isEqualToComparingFieldByField(CharacteristicValue(0))
+        assertThat(updatedPlayer.maxReckless).isEqualTo(2)
+        assertThat(updatedPlayer.rank).isEqualTo(3)
+        assertThat(updatedPlayer.money.gold).isEqualTo(2)
+        assertThat(updatedPlayer.inventory.findItemByName("Sword")?.damage).isEqualTo(5)
 
-        val isDeleted = playersDatabaseService.delete(updatedPlayer)
+        val isDeleted = playerService.delete(updatedPlayer)
         assertThat(isDeleted).isTrue()
-        val nullPlayer = playersDatabaseService.findById(updatedPlayer.id)
+        val nullPlayer = playerService.find(updatedPlayer.id)
         assertThat(nullPlayer).isNull()
-        assertThat(playersDatabaseService.findAll().size).isEqualTo(0)
+        assertThat(playerService.findAll().size).isEqualTo(0)
 
-        val cantDelete = playersDatabaseService.delete(updatedPlayer)
+        val cantDelete = playerService.delete(updatedPlayer)
         assertThat(cantDelete).isFalse()
     }
 }

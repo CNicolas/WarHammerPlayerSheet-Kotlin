@@ -10,14 +10,35 @@ import warhammer.playersheet.player.extensions.setAutomaticFields
 
 class PlayerInitialization {
     @Test
-    fun should_max_encumbrance_equal_20() {
+    fun should_calculate_max_encumbrance() {
+        val identicalCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(3))
+
+        val woodElf = Player(
+                name = "WoodElf",
+                race = Race.WOOD_ELF,
+                characteristics = identicalCharacteristics
+        ).setAutomaticFields()
+
+        assertThat(woodElf.maxEncumbrance).isEqualTo(20)
+
+        val dwarf = Player(
+                name = "Dwarf",
+                race = Race.DWARF,
+                characteristics = identicalCharacteristics
+        ).setAutomaticFields()
+
+        assertThat(dwarf.maxEncumbrance).isEqualTo(25)
+    }
+
+    @Test
+    fun should_max_encumbrance_equal_25_when_dwarf() {
         val player = Player(
                 name = "PlayerName",
-                race = Race.WOOD_ELF,
+                race = Race.DWARF,
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(3))
         ).setAutomaticFields()
 
-        assertThat(player.maxEncumbrance).isEqualTo(20)
+        assertThat(player.maxEncumbrance).isEqualTo(25)
     }
 
     @Test
