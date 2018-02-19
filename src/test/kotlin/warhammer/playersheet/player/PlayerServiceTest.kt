@@ -20,12 +20,80 @@ import warhammer.playersheet.player.extensions.setAutomaticFields
 import warhammer.playersheet.player.extensions.updateItemByName
 import warhammer.playersheet.player.services.PlayerService
 
-class PlayerDatabaseTest {
+class PlayerServiceTest {
     private val playerService = PlayerService(PlayersDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER))
 
     @BeforeMethod
     fun clearDatabase() {
         playerService.deleteAll()
+    }
+
+    @Test
+    fun should_find_by_different_means() {
+        val id = 1
+        val name = "John"
+        val player = Player(name = name)
+        playerService.add(player)
+
+        val playerFoundById = playerService.find(id)
+        assertThat(playerFoundById).isNotNull()
+        assertThat(playerFoundById!!.id).isEqualTo(id)
+        assertThat(playerFoundById.name).isEqualTo(name)
+
+        val playerFoundByName = playerService.find(name)
+        assertThat(playerFoundByName).isNotNull()
+        assertThat(playerFoundByName!!.id).isEqualTo(id)
+        assertThat(playerFoundByName.name).isEqualTo(name)
+
+        val confusedPlayer1 = playerService.find(id = 1, name = "Mika")
+        assertThat(confusedPlayer1).isNull()
+        val confusedPlayer2 = playerService.find(id = 3, name = name)
+        assertThat(confusedPlayer2).isNull()
+    }
+
+    @Test
+    fun should_update_different_parts_of_player() {
+        val characteristics = PlayerCharacteristics(strength = CharacteristicValue(2))
+        val state = PlayerState(maxWounds = 10)
+        val inventory = PlayerInventory(maxEncumbrance = 20)
+        val player = Player(name = "John", characteristics = characteristics, state = state, inventory = inventory)
+        val addedPlayer = playerService.add(player)
+
+        assertThat(addedPlayer).isNotNull()
+        assertThat(addedPlayer!!.name).isEqualTo("John")
+        assertThat(addedPlayer.strength.value).isEqualTo(2)
+        assertThat(addedPlayer.maxWounds).isEqualTo(10)
+        assertThat(addedPlayer.maxEncumbrance).isEqualTo(20)
+
+        val updateByPlayer = playerService.update(addedPlayer.copy(name = "Jack", state = addedPlayer.state.copy(maxWounds = 12)))
+        assertThat(updateByPlayer).isNotNull()
+        assertThat(updateByPlayer!!.name).isEqualTo("Jack")
+        assertThat(updateByPlayer.strength.value).isEqualTo(2)
+        assertThat(updateByPlayer.maxWounds).isEqualTo(12)
+        assertThat(updateByPlayer.maxEncumbrance).isEqualTo(20)
+
+        val updateByPlayerAndState = playerService.update(addedPlayer, addedPlayer.state.copy(maxWounds = 12))
+        assertThat(updateByPlayerAndState).isNotNull()
+        assertThat(updateByPlayerAndState!!.name).isEqualTo("John")
+        assertThat(updateByPlayerAndState.strength.value).isEqualTo(2)
+        assertThat(updateByPlayerAndState.maxWounds).isEqualTo(12)
+        assertThat(updateByPlayerAndState.maxEncumbrance).isEqualTo(20)
+
+        val updateByPlayerAndInventory = playerService.update(addedPlayer, addedPlayer.inventory.copy(maxEncumbrance = 25))
+        assertThat(updateByPlayerAndInventory).isNotNull()
+        assertThat(updateByPlayerAndInventory!!.name).isEqualTo("John")
+        assertThat(updateByPlayerAndInventory.strength.value).isEqualTo(2)
+        assertThat(updateByPlayerAndInventory.maxWounds).isEqualTo(10)
+        assertThat(updateByPlayerAndInventory.maxEncumbrance).isEqualTo(25)
+
+        val updateByPlayerAndCharacteristics = playerService.update(addedPlayer,
+                addedPlayer.characteristics.copy(strength = CharacteristicValue(3, 2)))
+        assertThat(updateByPlayerAndCharacteristics).isNotNull()
+        assertThat(updateByPlayerAndCharacteristics!!.name).isEqualTo("John")
+        assertThat(updateByPlayerAndCharacteristics.strength.value).isEqualTo(3)
+        assertThat(updateByPlayerAndCharacteristics.strength.fortuneValue).isEqualTo(2)
+        assertThat(updateByPlayerAndCharacteristics.maxWounds).isEqualTo(10)
+        assertThat(updateByPlayerAndCharacteristics.maxEncumbrance).isEqualTo(20)
     }
 
     @Test

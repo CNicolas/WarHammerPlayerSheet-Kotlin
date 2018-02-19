@@ -15,8 +15,16 @@ class PlayerService(private val playersDatabaseService: PlayersDatabaseService) 
 
     fun find(name: String): Player? = playersDatabaseService.findByName(name)
 
-    fun find(player: Player): Player? =
-            playersDatabaseService.findById(player.id) ?: playersDatabaseService.findByName(player.name)
+    fun find(id: Int, name: String): Player? {
+        val playerById = playersDatabaseService.findById(id)
+        val playerByName = playersDatabaseService.findByName(name)
+
+        return when {
+            playerById?.id == playerByName?.id && playerById?.name == playerByName?.name -> playerById
+            else -> null
+        }
+    }
+
 
     fun findAll(): List<Player> = playersDatabaseService.findAll()
 

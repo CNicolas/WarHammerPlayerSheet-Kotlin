@@ -6,8 +6,10 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerInventory
 import warhammer.database.entities.player.inventory.item.Armor
 import warhammer.database.entities.player.inventory.item.Expandable
+import warhammer.database.entities.player.inventory.item.GenericItem
 import warhammer.database.entities.player.inventory.item.Weapon
 import warhammer.database.entities.player.inventory.item.enums.ItemType
+import warhammer.database.entities.player.inventory.item.enums.Quality.LOW
 
 class InventoryTests {
     @Test
@@ -62,5 +64,32 @@ class InventoryTests {
         assertThat(newPlayer.inventory.findItemByName("Baton")).isNotNull()
         assertThat(newPlayer.inventory.findItemByName("Baton")?.type).isEqualTo(ItemType.WEAPON)
         assertThat(newPlayer.inventory.findItemByName("Chapeau")).isNull()
+    }
+
+    @Test
+    fun should_get_typed_item_by_name() {
+        val items = listOf(
+                Armor(name = "Combinaison", soak = 2),
+                Expandable(name = "Compote", uses = 3),
+                GenericItem(name = "Corde", quality = LOW),
+                Weapon(name = "Pince", damage = 2)
+        )
+        val player = Player(name = "PlayerName", inventory = PlayerInventory(items = items)).setAutomaticFields()
+
+        val armor = player.inventory.findArmorByName("Combinaison")
+        assertThat(armor).isNotNull()
+        assertThat(armor!!.soak).isEqualTo(2)
+
+        val expandable = player.inventory.findExpandableByName("Compote")
+        assertThat(expandable).isNotNull()
+        assertThat(expandable!!.uses).isEqualTo(3)
+
+        val genericItem = player.inventory.findGenericItemByName("Corde")
+        assertThat(genericItem).isNotNull()
+        assertThat(genericItem!!.quality).isEqualTo(LOW)
+
+        val weapon = player.inventory.findWeaopnByName("Pince")
+        assertThat(weapon).isNotNull()
+        assertThat(weapon!!.damage).isEqualTo(2)
     }
 }

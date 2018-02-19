@@ -22,17 +22,17 @@ fun PlayerInventory.calculateEncumbrance(): PlayerInventory = copy(
 // region Find by name
 fun PlayerInventory.findItemByName(name: String): Item? = items.find { it.name == name }
 
-//fun PlayerInventory.findArmorByName(name: String): Armor? = items
-//        .find { it.type == ARMOR && it.name == name } as? Armor?
-//
-//fun PlayerInventory.findExpandableByName(name: String): Expandable? = items
-//        .find { it.type == EXPANDABLE && it.name == name } as? Expandable?
-//
-//fun PlayerInventory.findGenericItemByName(name: String): GenericItem? = items
-//        .find { it.type == ITEM && it.name == name } as? GenericItem?
-//
-//fun PlayerInventory.findWeaopnByName(name: String): Weapon? = items
-//        .find { it.type == WEAPON && it.name == name } as? Weapon?
+fun PlayerInventory.findArmorByName(name: String): Armor? = items
+        .find { it.type == ARMOR && it.name == name } as? Armor?
+
+fun PlayerInventory.findExpandableByName(name: String): Expandable? = items
+        .find { it.type == EXPANDABLE && it.name == name } as? Expandable?
+
+fun PlayerInventory.findGenericItemByName(name: String): GenericItem? = items
+        .find { it.type == ITEM && it.name == name } as? GenericItem?
+
+fun PlayerInventory.findWeaopnByName(name: String): Weapon? = items
+        .find { it.type == WEAPON && it.name == name } as? Weapon?
 // endregion
 
 fun PlayerInventory.addItem(item: Item): PlayerInventory {
