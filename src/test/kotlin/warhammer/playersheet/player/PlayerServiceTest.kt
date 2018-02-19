@@ -65,35 +65,15 @@ class PlayerServiceTest {
         assertThat(addedPlayer.maxWounds).isEqualTo(10)
         assertThat(addedPlayer.maxEncumbrance).isEqualTo(20)
 
+        addedPlayer.name = "Jack"
+        addedPlayer.maxWounds = 12
+
         val updateByPlayer = playerService.update(addedPlayer.copy(name = "Jack", state = addedPlayer.state.copy(maxWounds = 12)))
         assertThat(updateByPlayer).isNotNull()
         assertThat(updateByPlayer!!.name).isEqualTo("Jack")
         assertThat(updateByPlayer.strength.value).isEqualTo(2)
         assertThat(updateByPlayer.maxWounds).isEqualTo(12)
         assertThat(updateByPlayer.maxEncumbrance).isEqualTo(20)
-
-        /*val updateByPlayerAndCharacteristics = playerService.update(addedPlayer,
-                addedPlayer.characteristics.copy(strength = CharacteristicValue(3, 2)))
-        assertThat(updateByPlayerAndCharacteristics).isNotNull()
-        assertThat(updateByPlayerAndCharacteristics!!.name).isEqualTo("John")
-        assertThat(updateByPlayerAndCharacteristics.strength.value).isEqualTo(3)
-        assertThat(updateByPlayerAndCharacteristics.strength.fortuneValue).isEqualTo(2)
-        assertThat(updateByPlayerAndCharacteristics.maxWounds).isEqualTo(10)
-        assertThat(updateByPlayerAndCharacteristics.maxEncumbrance).isEqualTo(20)
-
-        val updateByPlayerAndState = playerService.update(addedPlayer, addedPlayer.state.copy(maxWounds = 12))
-        assertThat(updateByPlayerAndState).isNotNull()
-        assertThat(updateByPlayerAndState!!.name).isEqualTo("John")
-        assertThat(updateByPlayerAndState.strength.value).isEqualTo(2)
-        assertThat(updateByPlayerAndState.maxWounds).isEqualTo(12)
-        assertThat(updateByPlayerAndState.maxEncumbrance).isEqualTo(20)
-
-        val updateByPlayerAndInventory = playerService.update(addedPlayer, addedPlayer.inventory.copy(maxEncumbrance = 25))
-        assertThat(updateByPlayerAndInventory).isNotNull()
-        assertThat(updateByPlayerAndInventory!!.name).isEqualTo("John")
-        assertThat(updateByPlayerAndInventory.strength.value).isEqualTo(2)
-        assertThat(updateByPlayerAndInventory.maxWounds).isEqualTo(10)
-        assertThat(updateByPlayerAndInventory.maxEncumbrance).isEqualTo(25)*/
     }
 
     @Test
@@ -113,39 +93,6 @@ class PlayerServiceTest {
         assertThat(updateByPlayer.willpower.fortuneValue).isEqualTo(0)
         assertThat(updateByPlayer.careerName).isEqualTo("Unemployed")
         assertThat(updateByPlayer.money.brass).isEqualTo(0)
-
-        /*val updateByPlayerAndCharacteristics = playerService.update(
-                Player(id = 1, name = "Bob"),
-                PlayerCharacteristics(willpower = CharacteristicValue(4, 1))
-        )
-        assertThat(updateByPlayerAndCharacteristics).isNotNull()
-        assertThat(updateByPlayerAndCharacteristics!!.name).isEqualTo("Bob")
-        assertThat(updateByPlayerAndCharacteristics.willpower.value).isEqualTo(4)
-        assertThat(updateByPlayerAndCharacteristics.willpower.fortuneValue).isEqualTo(1)
-        assertThat(updateByPlayerAndCharacteristics.careerName).isEqualTo("Unemployed")
-        assertThat(updateByPlayerAndCharacteristics.money.brass).isEqualTo(0)
-
-        val updateByPlayerAndState = playerService.update(
-                Player(id = 1, name = "Dave"),
-                PlayerState(career = Career(name = "Soldier"))
-        )
-        assertThat(updateByPlayerAndState).isNotNull()
-        assertThat(updateByPlayerAndState!!.name).isEqualTo("Dave")
-        assertThat(updateByPlayerAndState.willpower.value).isEqualTo(4)
-        assertThat(updateByPlayerAndState.willpower.fortuneValue).isEqualTo(1)
-        assertThat(updateByPlayerAndState.careerName).isEqualTo(0)
-        assertThat(updateByPlayerAndState.money.brass).isEqualTo(0)
-
-        val updateByPlayerAndInventory = playerService.update(
-                Player(name = "Dave", race = Race.HIGH_ELF),
-                PlayerInventory(money = Money(80, 0, 0))
-        )
-        assertThat(updateByPlayerAndInventory).isNotNull()
-        assertThat(updateByPlayerAndInventory!!.name).isEqualTo("Dave")
-        assertThat(updateByPlayerAndInventory.willpower.value).isEqualTo(4)
-        assertThat(updateByPlayerAndInventory.willpower.fortuneValue).isEqualTo(1)
-        assertThat(updateByPlayerAndInventory.careerName).isEqualTo("Soldier")
-        assertThat(updateByPlayerAndInventory.money.brass).isEqualTo(80)*/
     }
 
     @Test
@@ -197,8 +144,8 @@ class PlayerServiceTest {
         updatePlayerInventory.updateItemByName(weapon.name, weapon.copy(damage = 5))
 
         val updatePlayerState = savedPlayer.state
-        updatePlayerState.stance.maxReckless = 2
-        updatePlayerState.career.rank = 3
+        updatePlayerState.maxReckless = 2
+        updatePlayerState.rank = 3
 
         val updatedPlayer = playerService.update(savedPlayer.copy(
                 characteristics = updatePlayerCharacteristics,

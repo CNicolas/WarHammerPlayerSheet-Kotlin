@@ -28,20 +28,7 @@ class PlayerService(private val playersDatabaseService: PlayersDatabaseService) 
 
     // region UPDATE
 
-    fun update(player: Player): Player? =
-            playersDatabaseService.update(player)
-//
-//    fun update(player: Player, playerState: PlayerState): Player? =
-//            playersDatabaseService.update(player.copy(state = playerState))
-//
-//    fun update(player: Player, playerCharacteristics: PlayerCharacteristics): Player? {
-//        val entity = player.copy(characteristics = playerCharacteristics)
-//        return playersDatabaseService.update(entity)
-//    }
-//
-//    fun update(player: Player, playerInventory: PlayerInventory): Player? =
-//            playersDatabaseService.update(player.copy(inventory = playerInventory))
-
+    fun update(player: Player): Player? = playersDatabaseService.update(player)
 
     // endregion
 
