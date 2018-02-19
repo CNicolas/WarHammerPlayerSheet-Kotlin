@@ -16,7 +16,7 @@ class InventoryTests {
     fun should_have_encumbrance_of_2() {
         val player = Player(name = "PlayerName",
                 inventory = PlayerInventory(
-                        items = listOf(Weapon(name = "Baton", encumbrance = 2))
+                        items = mutableListOf(Weapon(name = "Baton", encumbrance = 2))
                 )).setAutomaticFields()
 
         assertThat(player.encumbrance).isEqualTo(2)
@@ -26,7 +26,7 @@ class InventoryTests {
     fun should_have_encumbrance_increased_when_adding_item() {
         val player = Player(name = "PlayerName",
                 inventory = PlayerInventory(
-                        items = listOf(Weapon(name = "Baton", encumbrance = 2))
+                        items = mutableListOf(Weapon(name = "Baton", encumbrance = 2))
                 )).setAutomaticFields()
 
         assertThat(player.items.size).isEqualTo(1)
@@ -47,7 +47,7 @@ class InventoryTests {
     fun should_have_encumbrance_decreased_when_removing_item() {
         val player = Player(name = "PlayerName",
                 inventory = PlayerInventory(
-                        items = listOf(Weapon(name = "Baton", encumbrance = 2),
+                        items = mutableListOf(Weapon(name = "Baton", encumbrance = 2),
                                 Armor(name = "Chapeau", encumbrance = 1))
                 )).setAutomaticFields()
 
@@ -68,7 +68,7 @@ class InventoryTests {
 
     @Test
     fun should_get_typed_item_by_name() {
-        val items = listOf(
+        val items = mutableListOf(
                 Armor(name = "Combinaison", soak = 2),
                 Expandable(name = "Compote", uses = 3),
                 GenericItem(name = "Corde", quality = LOW),

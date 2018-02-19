@@ -72,6 +72,15 @@ class PlayerServiceTest {
         assertThat(updateByPlayer.maxWounds).isEqualTo(12)
         assertThat(updateByPlayer.maxEncumbrance).isEqualTo(20)
 
+        /*val updateByPlayerAndCharacteristics = playerService.update(addedPlayer,
+                addedPlayer.characteristics.copy(strength = CharacteristicValue(3, 2)))
+        assertThat(updateByPlayerAndCharacteristics).isNotNull()
+        assertThat(updateByPlayerAndCharacteristics!!.name).isEqualTo("John")
+        assertThat(updateByPlayerAndCharacteristics.strength.value).isEqualTo(3)
+        assertThat(updateByPlayerAndCharacteristics.strength.fortuneValue).isEqualTo(2)
+        assertThat(updateByPlayerAndCharacteristics.maxWounds).isEqualTo(10)
+        assertThat(updateByPlayerAndCharacteristics.maxEncumbrance).isEqualTo(20)
+
         val updateByPlayerAndState = playerService.update(addedPlayer, addedPlayer.state.copy(maxWounds = 12))
         assertThat(updateByPlayerAndState).isNotNull()
         assertThat(updateByPlayerAndState!!.name).isEqualTo("John")
@@ -84,16 +93,59 @@ class PlayerServiceTest {
         assertThat(updateByPlayerAndInventory!!.name).isEqualTo("John")
         assertThat(updateByPlayerAndInventory.strength.value).isEqualTo(2)
         assertThat(updateByPlayerAndInventory.maxWounds).isEqualTo(10)
-        assertThat(updateByPlayerAndInventory.maxEncumbrance).isEqualTo(25)
+        assertThat(updateByPlayerAndInventory.maxEncumbrance).isEqualTo(25)*/
+    }
 
-        val updateByPlayerAndCharacteristics = playerService.update(addedPlayer,
-                addedPlayer.characteristics.copy(strength = CharacteristicValue(3, 2)))
+    @Test
+    fun should_update_with_new_parts_of_player() {
+        val addedPlayer = playerService.add(Player(name = "John"))
+        assertThat(addedPlayer).isNotNull()
+        assertThat(addedPlayer!!.name).isEqualTo("John")
+        assertThat(addedPlayer.willpower.value).isEqualTo(0)
+        assertThat(addedPlayer.willpower.fortuneValue).isEqualTo(0)
+        assertThat(addedPlayer.careerName).isEqualTo("Unemployed")
+        assertThat(addedPlayer.money.brass).isEqualTo(0)
+
+        val updateByPlayer = playerService.update(Player(id = 1, name = "Jack"))
+        assertThat(updateByPlayer).isNotNull()
+        assertThat(updateByPlayer!!.name).isEqualTo("Jack")
+        assertThat(updateByPlayer.willpower.value).isEqualTo(0)
+        assertThat(updateByPlayer.willpower.fortuneValue).isEqualTo(0)
+        assertThat(updateByPlayer.careerName).isEqualTo("Unemployed")
+        assertThat(updateByPlayer.money.brass).isEqualTo(0)
+
+        /*val updateByPlayerAndCharacteristics = playerService.update(
+                Player(id = 1, name = "Bob"),
+                PlayerCharacteristics(willpower = CharacteristicValue(4, 1))
+        )
         assertThat(updateByPlayerAndCharacteristics).isNotNull()
-        assertThat(updateByPlayerAndCharacteristics!!.name).isEqualTo("John")
-        assertThat(updateByPlayerAndCharacteristics.strength.value).isEqualTo(3)
-        assertThat(updateByPlayerAndCharacteristics.strength.fortuneValue).isEqualTo(2)
-        assertThat(updateByPlayerAndCharacteristics.maxWounds).isEqualTo(10)
-        assertThat(updateByPlayerAndCharacteristics.maxEncumbrance).isEqualTo(20)
+        assertThat(updateByPlayerAndCharacteristics!!.name).isEqualTo("Bob")
+        assertThat(updateByPlayerAndCharacteristics.willpower.value).isEqualTo(4)
+        assertThat(updateByPlayerAndCharacteristics.willpower.fortuneValue).isEqualTo(1)
+        assertThat(updateByPlayerAndCharacteristics.careerName).isEqualTo("Unemployed")
+        assertThat(updateByPlayerAndCharacteristics.money.brass).isEqualTo(0)
+
+        val updateByPlayerAndState = playerService.update(
+                Player(id = 1, name = "Dave"),
+                PlayerState(career = Career(name = "Soldier"))
+        )
+        assertThat(updateByPlayerAndState).isNotNull()
+        assertThat(updateByPlayerAndState!!.name).isEqualTo("Dave")
+        assertThat(updateByPlayerAndState.willpower.value).isEqualTo(4)
+        assertThat(updateByPlayerAndState.willpower.fortuneValue).isEqualTo(1)
+        assertThat(updateByPlayerAndState.careerName).isEqualTo(0)
+        assertThat(updateByPlayerAndState.money.brass).isEqualTo(0)
+
+        val updateByPlayerAndInventory = playerService.update(
+                Player(name = "Dave", race = Race.HIGH_ELF),
+                PlayerInventory(money = Money(80, 0, 0))
+        )
+        assertThat(updateByPlayerAndInventory).isNotNull()
+        assertThat(updateByPlayerAndInventory!!.name).isEqualTo("Dave")
+        assertThat(updateByPlayerAndInventory.willpower.value).isEqualTo(4)
+        assertThat(updateByPlayerAndInventory.willpower.fortuneValue).isEqualTo(1)
+        assertThat(updateByPlayerAndInventory.careerName).isEqualTo("Soldier")
+        assertThat(updateByPlayerAndInventory.money.brass).isEqualTo(80)*/
     }
 
     @Test
@@ -112,7 +164,7 @@ class PlayerServiceTest {
                 name = "PlayerName",
                 characteristics = PlayerCharacteristics(
                         strength = strengthValue,
-                        fellowShip = fellowShipValue,
+                        fellowship = fellowShipValue,
                         intelligence = intelligenceValue),
                 state = PlayerState(
                         maxStress = 6,
@@ -121,7 +173,7 @@ class PlayerServiceTest {
                 ),
                 inventory = PlayerInventory(
                         money = money,
-                        items = listOf(weapon)
+                        items = mutableListOf(weapon)
                 )
         ).setAutomaticFields()
 
@@ -137,16 +189,17 @@ class PlayerServiceTest {
         assertThat(savedPlayer.money.gold).isEqualTo(3)
         assertThat(savedPlayer.inventory.findItemByName("Sword")?.damage).isEqualTo(4)
 
-        val updatePlayerCharacteristics = savedPlayer.characteristics.copy(
-                intelligence = CharacteristicValue(0)
-        )
+        val updatePlayerCharacteristics = savedPlayer.characteristics
+        updatePlayerCharacteristics.intelligence = CharacteristicValue(0)
+
         val updatePlayerInventory = savedPlayer.inventory
-                .updateItemByName(weapon.name, weapon.copy(damage = 5))
-                .copy(money = money.copy(gold = 2))
-        val updatePlayerState = savedPlayer.state.copy(
-                stance = stance.copy(maxReckless = 2),
-                career = career.copy(rank = 3)
-        )
+        updatePlayerInventory.money.gold = 2
+        updatePlayerInventory.updateItemByName(weapon.name, weapon.copy(damage = 5))
+
+        val updatePlayerState = savedPlayer.state
+        updatePlayerState.stance.maxReckless = 2
+        updatePlayerState.career.rank = 3
+
         val updatedPlayer = playerService.update(savedPlayer.copy(
                 characteristics = updatePlayerCharacteristics,
                 state = updatePlayerState,

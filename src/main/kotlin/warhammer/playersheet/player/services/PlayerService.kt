@@ -1,9 +1,6 @@
 package warhammer.playersheet.player.services
 
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerInventory
-import warhammer.database.entities.player.PlayerState
-import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.services.PlayersDatabaseService
 
 class PlayerService(private val playersDatabaseService: PlayersDatabaseService) {
@@ -25,7 +22,6 @@ class PlayerService(private val playersDatabaseService: PlayersDatabaseService) 
         }
     }
 
-
     fun findAll(): List<Player> = playersDatabaseService.findAll()
 
     // endregion
@@ -34,15 +30,18 @@ class PlayerService(private val playersDatabaseService: PlayersDatabaseService) 
 
     fun update(player: Player): Player? =
             playersDatabaseService.update(player)
+//
+//    fun update(player: Player, playerState: PlayerState): Player? =
+//            playersDatabaseService.update(player.copy(state = playerState))
+//
+//    fun update(player: Player, playerCharacteristics: PlayerCharacteristics): Player? {
+//        val entity = player.copy(characteristics = playerCharacteristics)
+//        return playersDatabaseService.update(entity)
+//    }
+//
+//    fun update(player: Player, playerInventory: PlayerInventory): Player? =
+//            playersDatabaseService.update(player.copy(inventory = playerInventory))
 
-    fun update(player: Player, playerState: PlayerState): Player? =
-            playersDatabaseService.update(player.copy(state = playerState))
-
-    fun update(player: Player, playerCharacteristics: PlayerCharacteristics): Player? =
-            playersDatabaseService.update(player.copy(characteristics = playerCharacteristics))
-
-    fun update(player: Player, playerInventory: PlayerInventory): Player? =
-            playersDatabaseService.update(player.copy(inventory = playerInventory))
 
     // endregion
 

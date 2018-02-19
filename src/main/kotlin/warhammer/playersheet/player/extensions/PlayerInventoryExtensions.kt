@@ -15,9 +15,11 @@ fun Player.removeItemByName(name: String): Player = copy(inventory = inventory.r
 
 // endregion
 
-fun PlayerInventory.calculateEncumbrance(): PlayerInventory = copy(
-        encumbrance = items.sumBy { it.encumbrance }
-)
+fun PlayerInventory.calculateEncumbrance(): PlayerInventory {
+    encumbrance = items.sumBy { it.encumbrance }
+
+    return this
+}
 
 // region Find by name
 fun PlayerInventory.findItemByName(name: String): Item? = items.find { it.name == name }
@@ -36,43 +38,40 @@ fun PlayerInventory.findWeaopnByName(name: String): Weapon? = items
 // endregion
 
 fun PlayerInventory.addItem(item: Item): PlayerInventory {
-    val newItems = items.toMutableList()
-    newItems.add(item)
+    items.add(item)
 
-    return updateItems(newItems)
+    return calculateEncumbrance()
 }
 
 fun PlayerInventory.removeItemByName(name: String): PlayerInventory {
-    val newItems = items.toMutableList()
-    newItems.removeAt(newItems.indexOfFirst { it.name == name })
+    items.removeAt(items.indexOfFirst { it.name == name })
 
-    return updateItems(newItems)
+    return calculateEncumbrance()
 }
 
-fun PlayerInventory.updateItemByName(name: String, item: Item): PlayerInventory =
-        updateItems(items.map {
-            when (name) {
-                it.name -> item.setIds(it)
-                else -> it
-            }
-        })
-
-fun PlayerInventory.updateItems(newItems: List<Item>): PlayerInventory = copy(
-        items = newItems.map {
-            when (it.type) {
-                ITEM -> it as GenericItem
-                ARMOR -> it as Armor
-                WEAPON -> it as Weapon
-                EXPANDABLE -> it as Expandable
-            }
+fun PlayerInventory.updateItemByName(name: String, item: Item): PlayerInventory {
+    items.forEach {
+        if (name == it.name) {
+            it.merge(item)
         }
-).calculateEncumbrance()
+    }
 
-private fun Item.setIds(item: Item): Item = setIds(item.id, item.inventoryId)
+    return calculateEncumbrance()
+}
 
-private fun Item.setIds(id: Int, inventoryId: Int): Item = when (type) {
-    ITEM -> (this as GenericItem).copy(id = id, inventoryId = inventoryId)
-    ARMOR -> (this as Armor).copy(id = id, inventoryId = inventoryId)
-    WEAPON -> (this as Weapon).copy(id = id, inventoryId = inventoryId)
-    EXPANDABLE -> (this as Expandable).copy(id = id, inventoryId = inventoryId)
+private fun Item.merge(newItem: Item): Item {
+    if (criticalLevel != newItem.criticalLevel) criticalLevel = newItem.criticalLevel
+    if (damage != newItem.damage) damage = newItem.damage
+    if (defense != newItem.defense) defense = newItem.defense
+    if (description != newItem.description) description = newItem.description
+    if (encumbrance != newItem.encumbrance) encumbrance = newItem.encumbrance
+    if (isEquipped != newItem.isEquipped) isEquipped = newItem.isEquipped
+    if (quality != newItem.quality) quality = newItem.quality
+    if (quantity != newItem.quantity) quantity = newItem.quantity
+    if (range != newItem.range) range = newItem.range
+    if (soak != newItem.soak) soak = newItem.soak
+    if (type != newItem.type) type = newItem.type
+    if (uses != newItem.uses) uses = newItem.uses
+
+    return this
 }
