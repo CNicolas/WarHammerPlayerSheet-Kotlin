@@ -55,7 +55,7 @@ class PlayerServiceTest {
     fun should_update_different_parts_of_player() {
         val characteristics = PlayerCharacteristics(strength = CharacteristicValue(2))
         val state = PlayerState(maxWounds = 10)
-        val inventory = PlayerInventory(maxEncumbrance = 20)
+        val inventory = PlayerInventory()
         val player = Player(name = "John", characteristics = characteristics, state = state, inventory = inventory)
         val addedPlayer = playerService.add(player)
 
@@ -63,7 +63,7 @@ class PlayerServiceTest {
         assertThat(addedPlayer!!.name).isEqualTo("John")
         assertThat(addedPlayer.strength.value).isEqualTo(2)
         assertThat(addedPlayer.maxWounds).isEqualTo(10)
-        assertThat(addedPlayer.maxEncumbrance).isEqualTo(20)
+        assertThat(addedPlayer.maxEncumbrance).isEqualTo(0)
 
         addedPlayer.name = "Jack"
         addedPlayer.maxWounds = 12
@@ -73,7 +73,7 @@ class PlayerServiceTest {
         assertThat(updateByPlayer!!.name).isEqualTo("Jack")
         assertThat(updateByPlayer.strength.value).isEqualTo(2)
         assertThat(updateByPlayer.maxWounds).isEqualTo(12)
-        assertThat(updateByPlayer.maxEncumbrance).isEqualTo(20)
+        assertThat(updateByPlayer.maxEncumbrance).isEqualTo(15)
     }
 
     @Test

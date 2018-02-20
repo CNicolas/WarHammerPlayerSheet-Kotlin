@@ -7,11 +7,23 @@ import warhammer.database.entities.player.inventory.item.enums.ItemType.*
 
 // region Shortcuts on Player
 
-fun Player.calculateEncumbrance(): Player = copy(inventory = inventory.calculateEncumbrance())
+fun Player.calculateEncumbrance(): Player {
+    inventory.calculateEncumbrance()
 
-fun Player.addItem(item: Item): Player = copy(inventory = inventory.addItem(item)).calculateEncumbrance()
+    return this
+}
 
-fun Player.removeItemByName(name: String): Player = copy(inventory = inventory.removeItemByName(name)).calculateEncumbrance()
+fun Player.addItem(item: Item): Player {
+    inventory.addItem(item)
+
+    return this
+}
+
+fun Player.removeItemByName(name: String): Player {
+    inventory.removeItemByName(name)
+
+    return this
+}
 
 // endregion
 
@@ -22,6 +34,7 @@ fun PlayerInventory.calculateEncumbrance(): PlayerInventory {
 }
 
 // region Find by name
+
 fun PlayerInventory.findItemByName(name: String): Item? = items.find { it.name == name }
 
 fun PlayerInventory.findArmorByName(name: String): Armor? = items
@@ -35,6 +48,7 @@ fun PlayerInventory.findGenericItemByName(name: String): GenericItem? = items
 
 fun PlayerInventory.findWeaopnByName(name: String): Weapon? = items
         .find { it.type == WEAPON && it.name == name } as? Weapon?
+
 // endregion
 
 fun PlayerInventory.addItem(item: Item): PlayerInventory {

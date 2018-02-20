@@ -2,6 +2,7 @@ package warhammer.playersheet.player.services
 
 import warhammer.database.entities.player.Player
 import warhammer.database.services.PlayersDatabaseService
+import warhammer.playersheet.player.extensions.setAutomaticFields
 
 class PlayerService(private val playersDatabaseService: PlayersDatabaseService) {
     fun add(player: Player) = playersDatabaseService.add(player)
@@ -28,7 +29,7 @@ class PlayerService(private val playersDatabaseService: PlayersDatabaseService) 
 
     // region UPDATE
 
-    fun update(player: Player): Player? = playersDatabaseService.update(player)
+    fun update(player: Player): Player? = playersDatabaseService.update(player.setAutomaticFields())
 
     // endregion
 

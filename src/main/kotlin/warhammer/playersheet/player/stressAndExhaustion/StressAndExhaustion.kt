@@ -5,6 +5,7 @@ import warhammer.playersheet.player.stressAndExhaustion.ExhaustionState.*
 import warhammer.playersheet.player.stressAndExhaustion.StressState.*
 
 // region STRESS
+
 fun Player.addStress(stressPoints: Int): Player {
     state.stress += stressPoints
 
@@ -27,9 +28,11 @@ fun Player.stressState(): StressState =
             stress >= maxStress / 2 -> STRESSED
             else -> NOT_STRESSED
         }
+
 // endregion
 
 // region EXHAUSTION
+
 fun Player.addExhaustion(exhaustionPoints: Int): Player {
     state.exhaustion += exhaustionPoints
 
