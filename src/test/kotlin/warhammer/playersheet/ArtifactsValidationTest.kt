@@ -7,6 +7,7 @@ import warhammer.database.entities.Hand
 import warhammer.database.services.HandsDatabaseService
 import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.dicelauncher.launch.launchHand
+import warhammer.dicelauncher.launch.launchHandForStatistics
 
 class ArtifactsValidationTest {
     private val handsDatabaseService = HandsDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
@@ -29,14 +30,14 @@ class ArtifactsValidationTest {
         val savedHand = handsDatabaseService.add(hand)
         assertThat(savedHand).isNotNull()
 
-        val statisticsFor100SavedHand = launchForStatistics(savedHand!!, launchCount)
+        val statisticsFor100SavedHand = savedHand!!.launchForStatistics(launchCount)
         assertThat(statisticsFor100SavedHand.successfulLaunchCount).isLessThanOrEqualTo(launchCount)
         assertThat(statisticsFor100SavedHand.averageSuccess).isGreaterThanOrEqualTo(1.0)
 
         val foundHand = handsDatabaseService.findByName(handName)
         assertThat(foundHand).isNotNull()
 
-        val statisticsFor100FoundHand = launchForStatistics(foundHand!!, launchCount)
+        val statisticsFor100FoundHand = launchHandForStatistics(foundHand!!, launchCount)
         assertThat(statisticsFor100FoundHand.successfulLaunchCount).isLessThanOrEqualTo(launchCount)
         assertThat(statisticsFor100FoundHand.averageSuccess).isGreaterThanOrEqualTo(1.0)
     }

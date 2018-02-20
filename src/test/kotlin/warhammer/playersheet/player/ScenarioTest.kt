@@ -3,13 +3,15 @@ package warhammer.playersheet.player
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
+import warhammer.database.entities.DifficultyLevel
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.inventory.item.Weapon
 import warhammer.database.entities.player.inventory.item.enums.Quality.SUPERIOR
 import warhammer.database.entities.player.inventory.item.enums.Range
 import warhammer.database.services.PlayersDatabaseService
-import warhammer.dicelauncher.launch.launchHand
+import warhammer.dicelauncher.launch.launch
+import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.playersheet.PlayerSheetContext
 import warhammer.playersheet.player.extensions.addItem
 import warhammer.playersheet.player.services.PlayerService
@@ -85,7 +87,9 @@ class ScenarioTest {
         assertThat(updatedPlayer3.maxStress).isEqualTo(8)
         assertThat(updatedPlayer3.encumbrance).isEqualTo(5)
 
-        val res = launchHand(player.agility.getHand("Initiative"))
-        assertThat(res.isSuccessful).isTrue()
+        val initiative = player.agility.getHand("Initiative").launch()
+        assertThat(initiative.isSuccessful).isTrue()
+        val impossible = player.fellowship.getHand("Impossible", DifficultyLevel.GODLIKE).launchForStatistics(50)
+        assertThat(impossible.successfulPercentage).isLessThan(70.0)
     }
 }
