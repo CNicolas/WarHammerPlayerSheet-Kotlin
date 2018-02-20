@@ -1,4 +1,4 @@
-package warhammer.playersheet.player
+package warhammer.playersheet.extensions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
@@ -6,9 +6,8 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.entities.player.other.Race
-import warhammer.playersheet.player.extensions.setAutomaticFields
 
-class PlayerInitialization {
+class PlayerExtensionsTest {
     @Test
     fun should_calculate_max_encumbrance() {
         val identicalCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(3))
@@ -59,5 +58,18 @@ class PlayerInitialization {
         ).setAutomaticFields()
 
         assertThat(player.maxExhaustion).isEqualTo(6)
+    }
+
+    @Test
+    fun should_earn_an_experience_point() {
+        val player = Player(name = "PlayerName")
+
+        assertThat(player.totalExperience).isEqualTo(0)
+        assertThat(player.availableExperience).isEqualTo(0)
+
+        player.earnExperiencePoints(1)
+
+        assertThat(player.totalExperience).isEqualTo(1)
+        assertThat(player.availableExperience).isEqualTo(1)
     }
 }

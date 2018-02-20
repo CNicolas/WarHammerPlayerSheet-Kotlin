@@ -1,12 +1,12 @@
-package warhammer.playersheet.player.extensions
+package warhammer.playersheet.extensions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerState
-import warhammer.playersheet.player.stressAndExhaustion.*
-import warhammer.playersheet.player.stressAndExhaustion.ExhaustionState.*
-import warhammer.playersheet.player.stressAndExhaustion.StressState.*
+import warhammer.playersheet.extensions.stressAndExhaustion.*
+import warhammer.playersheet.extensions.stressAndExhaustion.ExhaustionState.*
+import warhammer.playersheet.extensions.stressAndExhaustion.StressState.*
 
 class StressAndExhaustionTest {
     @Test

@@ -1,4 +1,4 @@
-package warhammer.playersheet.player.extensions
+package warhammer.playersheet.extensions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
@@ -11,7 +11,7 @@ import warhammer.database.entities.player.inventory.item.Weapon
 import warhammer.database.entities.player.inventory.item.enums.ItemType
 import warhammer.database.entities.player.inventory.item.enums.Quality.LOW
 
-class InventoryTests {
+class InventoryTest {
     @Test
     fun should_have_encumbrance_of_2() {
         val player = Player(name = "PlayerName",

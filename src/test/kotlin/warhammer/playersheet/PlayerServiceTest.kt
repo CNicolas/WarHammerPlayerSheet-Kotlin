@@ -1,4 +1,4 @@
-package warhammer.playersheet.player
+package warhammer.playersheet
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
@@ -14,11 +14,10 @@ import warhammer.database.entities.player.inventory.item.enums.Quality
 import warhammer.database.entities.player.state.Career
 import warhammer.database.entities.player.state.Stance
 import warhammer.database.services.PlayersDatabaseService
-import warhammer.playersheet.PlayerSheetContext
-import warhammer.playersheet.player.extensions.findItemByName
-import warhammer.playersheet.player.extensions.setAutomaticFields
-import warhammer.playersheet.player.extensions.updateItemByName
-import warhammer.playersheet.player.services.PlayerService
+import warhammer.playersheet.extensions.findItemByName
+import warhammer.playersheet.extensions.setAutomaticFields
+import warhammer.playersheet.extensions.updateItemByName
+import warhammer.playersheet.services.PlayerService
 
 class PlayerServiceTest {
     private val playerService = PlayerService(PlayersDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER))

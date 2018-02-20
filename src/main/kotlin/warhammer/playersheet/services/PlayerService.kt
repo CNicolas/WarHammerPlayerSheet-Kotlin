@@ -1,11 +1,15 @@
-package warhammer.playersheet.player.services
+package warhammer.playersheet.services
 
 import warhammer.database.entities.player.Player
 import warhammer.database.services.PlayersDatabaseService
-import warhammer.playersheet.player.extensions.setAutomaticFields
+import warhammer.playersheet.extensions.setAutomaticFields
 
 class PlayerService(private val playersDatabaseService: PlayersDatabaseService) {
+    // region CREATE
+
     fun add(player: Player) = playersDatabaseService.add(player)
+
+    // endregion
 
     // region FIND
 

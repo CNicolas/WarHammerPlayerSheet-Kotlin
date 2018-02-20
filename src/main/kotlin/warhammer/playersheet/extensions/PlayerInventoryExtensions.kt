@@ -1,4 +1,4 @@
-package warhammer.playersheet.player.extensions
+package warhammer.playersheet.extensions
 
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerInventory
@@ -89,3 +89,5 @@ private fun Item.merge(newItem: Item): Item {
 
     return this
 }
+
+internal const val ENCUMBRANCE_OVERLOAD_TO_MAX = 5

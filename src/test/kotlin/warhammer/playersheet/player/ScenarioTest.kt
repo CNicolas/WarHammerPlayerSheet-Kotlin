@@ -13,8 +13,8 @@ import warhammer.database.services.PlayersDatabaseService
 import warhammer.dicelauncher.launch.launch
 import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.playersheet.PlayerSheetContext
-import warhammer.playersheet.player.extensions.addItem
-import warhammer.playersheet.player.services.PlayerService
+import warhammer.playersheet.extensions.addItem
+import warhammer.playersheet.services.PlayerService
 
 class ScenarioTest {
     private val playerService = PlayerService(PlayersDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER))

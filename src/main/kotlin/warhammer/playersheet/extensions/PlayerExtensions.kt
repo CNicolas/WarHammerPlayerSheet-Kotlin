@@ -1,7 +1,18 @@
-package warhammer.playersheet.player.extensions
+package warhammer.playersheet.extensions
 
+import warhammer.database.entities.Hand
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.characteristics.Characteristic
 import warhammer.database.entities.player.other.Race
+
+fun Player.createHand(characteristic: Characteristic, name: String = "Hand"): Hand = characteristics[characteristic].getHand(name)
+
+fun Player.earnExperiencePoints(experiencePoints: Int): Player {
+    career.availableExperience += experiencePoints
+    career.totalExperience += experiencePoints
+
+    return this
+}
 
 fun Player.setAutomaticFields(): Player = calculateMaxFields().calculateEncumbrance()
 
@@ -15,5 +26,3 @@ private fun Player.calculateMaxFields(): Player {
 
     return this
 }
-
-private const val ENCUMBRANCE_OVERLOAD_TO_MAX = 5
