@@ -3,18 +3,18 @@ package warhammer.playersheet
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.entities.Hand
-import warhammer.database.services.HandsDatabaseService
+import warhammer.database.HandFacade
+import warhammer.database.entities.hand.Hand
 import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.dicelauncher.launch.launchHand
 import warhammer.dicelauncher.launch.launchHandForStatistics
 
 class ArtifactsValidationTest {
-    private val handsDatabaseService = HandsDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
+    private val handFacade = HandFacade(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
 
     @BeforeMethod
     fun clearDatabase() {
-        handsDatabaseService.deleteAll()
+        handFacade.deleteAll()
     }
 
     @Test
@@ -25,16 +25,16 @@ class ArtifactsValidationTest {
 
         assertThat(launchHand(hand).faces.size).isGreaterThanOrEqualTo(18)
 
-        handsDatabaseService.deleteAll()
+        handFacade.deleteAll()
 
-        val savedHand = handsDatabaseService.add(hand)
+        val savedHand = handFacade.save(hand)
         assertThat(savedHand).isNotNull()
 
-        val statisticsFor100SavedHand = savedHand!!.launchForStatistics(launchCount)
+        val statisticsFor100SavedHand = savedHand.launchForStatistics(launchCount)
         assertThat(statisticsFor100SavedHand.successfulLaunchCount).isLessThanOrEqualTo(launchCount)
         assertThat(statisticsFor100SavedHand.averageSuccess).isGreaterThanOrEqualTo(1.0)
 
-        val foundHand = handsDatabaseService.findByName(handName)
+        val foundHand = handFacade.find(handName)
         assertThat(foundHand).isNotNull()
 
         val statisticsFor100FoundHand = launchHandForStatistics(foundHand!!, launchCount)

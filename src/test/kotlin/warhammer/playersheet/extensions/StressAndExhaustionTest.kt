@@ -2,8 +2,8 @@ package warhammer.playersheet.extensions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
+import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerState
 import warhammer.playersheet.extensions.stressAndExhaustion.*
 import warhammer.playersheet.extensions.stressAndExhaustion.ExhaustionState.*
 import warhammer.playersheet.extensions.stressAndExhaustion.StressState.*
@@ -26,9 +26,9 @@ class StressAndExhaustionTest {
 
     @Test
     fun should_have_good_stress_state() {
-        val playerInComa = Player(name = "PlayerName", state = PlayerState(maxStress = 8, stress = 8))
-        val playerStressed = Player(name = "PlayerName", state = PlayerState(maxStress = 8, stress = 5))
-        val playerNotStressed = Player(name = "PlayerName", state = PlayerState(maxStress = 8, stress = 1))
+        val playerInComa = Player(name = "PlayerName", willpower = CharacteristicValue(4), stress = 8)
+        val playerStressed = Player(name = "PlayerName", willpower = CharacteristicValue(4), stress = 5)
+        val playerNotStressed = Player(name = "PlayerName", willpower = CharacteristicValue(4), stress = 1)
 
         assertThat(playerInComa.stressState()).isEqualTo(FAINTED)
         assertThat(playerStressed.stressState()).isEqualTo(STRESSED)
@@ -52,9 +52,9 @@ class StressAndExhaustionTest {
 
     @Test
     fun should_have_good_exhaustion_state() {
-        val playerInComa = Player(name = "PlayerName", state = PlayerState(maxExhaustion = 8, exhaustion = 8))
-        val playerExhausted = Player(name = "PlayerName", state = PlayerState(maxExhaustion = 8, exhaustion = 5))
-        val playerNotExhausted = Player(name = "PlayerName", state = PlayerState(maxExhaustion = 8, exhaustion = 1))
+        val playerInComa = Player(name = "PlayerName", toughness = CharacteristicValue(4), exhaustion = 8)
+        val playerExhausted = Player(name = "PlayerName", toughness = CharacteristicValue(4), exhaustion = 5)
+        val playerNotExhausted = Player(name = "PlayerName", toughness = CharacteristicValue(4), exhaustion = 1)
 
         assertThat(playerInComa.exhaustionState()).isEqualTo(COMA)
         assertThat(playerExhausted.exhaustionState()).isEqualTo(EXHAUSTED)

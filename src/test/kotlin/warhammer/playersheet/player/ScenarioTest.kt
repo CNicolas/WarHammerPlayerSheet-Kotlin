@@ -3,33 +3,32 @@ package warhammer.playersheet.player
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.entities.DifficultyLevel
+import warhammer.database.PlayerFacade
+import warhammer.database.entities.hand.DifficultyLevel
+import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.characteristics.CharacteristicValue
-import warhammer.database.entities.player.inventory.item.Weapon
-import warhammer.database.entities.player.inventory.item.enums.Quality.SUPERIOR
-import warhammer.database.entities.player.inventory.item.enums.Range
-import warhammer.database.services.PlayersDatabaseService
+import warhammer.database.entities.player.extensions.addItem
+import warhammer.database.entities.player.playerLinked.item.Weapon
+import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 import warhammer.dicelauncher.launch.launch
 import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.playersheet.PlayerSheetContext
-import warhammer.playersheet.extensions.addItem
-import warhammer.playersheet.services.PlayerService
 
 class ScenarioTest {
-    private val playerService = PlayerService(PlayersDatabaseService(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER))
+    private val facade = PlayerFacade(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
 
     @BeforeMethod
     fun clearDatabase() {
-        playerService.deleteAll()
+        facade.deleteAll()
     }
 
     @Test
     fun should_be_used() {
-        val player = playerService.add(Player(name = "John"))
+        val player = facade.save(Player(name = "John"))
         assertThat(player).isNotNull()
 
-        player!!.careerName = "Assassin"
+        player.careerName = "Assassin"
         player.rank = 3
         player.strength = CharacteristicValue(3)
         player.toughness = CharacteristicValue(4)
@@ -38,9 +37,8 @@ class ScenarioTest {
         player.willpower = CharacteristicValue(4)
         player.fellowship = CharacteristicValue(2)
 
-        val updatedPlayer1 = playerService.update(player)
-        assertThat(updatedPlayer1).isNotNull()
-        assertThat(updatedPlayer1!!.name).isEqualTo("John")
+        val updatedPlayer1 = facade.save(player)
+        assertThat(updatedPlayer1.name).isEqualTo("John")
         assertThat(updatedPlayer1.careerName).isEqualTo("Assassin")
         assertThat(updatedPlayer1.rank).isEqualTo(3)
         assertThat(updatedPlayer1.strength).isEqualTo(CharacteristicValue(3))
@@ -53,11 +51,10 @@ class ScenarioTest {
         assertThat(updatedPlayer1.maxStress).isEqualTo(8)
         assertThat(updatedPlayer1.encumbrance).isEqualTo(0)
 
-        player.addItem(Weapon(name = "Arc sylvain", damage = 5, criticalLevel = 3, quality = SUPERIOR, encumbrance = 5, range = Range.LONG, isEquipped = true))
+        player.addItem(Weapon(name = "Arc sylvain", damage = 5, criticalLevel = 3, quality = Quality.SUPERIOR, encumbrance = 5, range = Range.LONG, isEquipped = true))
 
-        val updatedPlayer2 = playerService.update(player)
-        assertThat(updatedPlayer2).isNotNull()
-        assertThat(updatedPlayer2!!.name).isEqualTo("John")
+        val updatedPlayer2 = facade.save(player)
+        assertThat(updatedPlayer2.name).isEqualTo("John")
         assertThat(updatedPlayer2.careerName).isEqualTo("Assassin")
         assertThat(updatedPlayer2.rank).isEqualTo(3)
         assertThat(updatedPlayer2.strength).isEqualTo(CharacteristicValue(3))
@@ -72,9 +69,8 @@ class ScenarioTest {
 
         player.agility = player.agility.copy(fortuneValue = player.agility.fortuneValue + 1)
 
-        val updatedPlayer3 = playerService.update(player)
-        assertThat(updatedPlayer3).isNotNull()
-        assertThat(updatedPlayer3!!.name).isEqualTo("John")
+        val updatedPlayer3 = facade.save(player)
+        assertThat(updatedPlayer3.name).isEqualTo("John")
         assertThat(updatedPlayer3.careerName).isEqualTo("Assassin")
         assertThat(updatedPlayer3.rank).isEqualTo(3)
         assertThat(updatedPlayer3.strength).isEqualTo(CharacteristicValue(3))

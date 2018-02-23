@@ -7,7 +7,7 @@ import warhammer.playersheet.extensions.stressAndExhaustion.StressState.*
 // region STRESS
 
 fun Player.addStress(stressPoints: Int): Player {
-    state.stress += stressPoints
+    stress += stressPoints
 
     return this
 }
@@ -17,7 +17,7 @@ fun Player.removeStress(stressPoints: Int): Player {
         stress - stressPoints <= 0 -> 0
         else -> stress - stressPoints
     }
-    state.stress = newStressValue
+    stress = newStressValue
 
     return this
 }
@@ -34,7 +34,7 @@ fun Player.stressState(): StressState =
 // region EXHAUSTION
 
 fun Player.addExhaustion(exhaustionPoints: Int): Player {
-    state.exhaustion += exhaustionPoints
+    exhaustion += exhaustionPoints
 
     return this
 }
@@ -44,7 +44,7 @@ fun Player.removeExhaustion(exhaustionPoints: Int): Player {
         exhaustion - exhaustionPoints <= 0 -> 0
         else -> exhaustion - exhaustionPoints
     }
-    state.exhaustion = newExhaustionValue
+    exhaustion = newExhaustionValue
 
     return this
 }
