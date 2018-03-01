@@ -8,6 +8,8 @@ import warhammer.database.entities.hand.DifficultyLevel
 import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.extensions.addItem
+import warhammer.database.entities.player.extensions.addTalent
+import warhammer.database.entities.player.extensions.equipTalent
 import warhammer.database.entities.player.playerLinked.item.Weapon
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
@@ -88,5 +90,12 @@ class ScenarioTest {
         assertThat(initiative.isSuccessful).isTrue()
         val impossible = player.fellowship.getHand("Impossible", DifficultyLevel.GODLIKE).launchForStatistics(50)
         assertThat(impossible.successfulPercentage).isLessThan(70.0)
+
+        val talent = facade.getAllTalents().first { it.name == "Ascétisme" }
+        player.addTalent(talent)
+        player.equipTalent(talent)
+        val updatedPlayer4 = facade.save(player)
+        assertThat(updatedPlayer4.talents.size).isEqualTo(1)
+        assertThat(updatedPlayer4.talents[0].isEquipped).isTrue()
     }
 }
