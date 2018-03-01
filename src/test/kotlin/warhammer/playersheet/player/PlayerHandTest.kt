@@ -8,7 +8,8 @@ import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.extensions.getSkillByName
-import warhammer.playersheet.PlayerSheetContext
+import warhammer.playersheet.TEST_DATABASE_URL
+import warhammer.playersheet.TEST_DRIVER
 import warhammer.playersheet.extensions.createHand
 
 class PlayerHandTest {
@@ -24,9 +25,9 @@ class PlayerHandTest {
 
     @Test
     fun should_create_hand_from_skill() {
-        val facade = PlayerFacade(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
+        val facade = PlayerFacade(TEST_DATABASE_URL, TEST_DRIVER)
         val player = facade.save(Player("John"))
-        player.strength = CharacteristicValue(4,2)
+        player.strength = CharacteristicValue(4, 2)
         player.getSkillByName("capacité de combat")!!.level = 2
         val hand = player.createHand(player.getSkillByName("capacité de combat")!!, "HandName", HARD)
 

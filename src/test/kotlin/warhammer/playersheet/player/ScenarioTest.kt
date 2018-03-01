@@ -13,10 +13,11 @@ import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
 import warhammer.dicelauncher.launch.launch
 import warhammer.dicelauncher.launch.launchForStatistics
-import warhammer.playersheet.PlayerSheetContext
+import warhammer.playersheet.TEST_DATABASE_URL
+import warhammer.playersheet.TEST_DRIVER
 
 class ScenarioTest {
-    private val facade = PlayerFacade(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
+    private val facade = PlayerFacade(TEST_DATABASE_URL, TEST_DRIVER)
 
     @BeforeMethod
     fun clearDatabase() {

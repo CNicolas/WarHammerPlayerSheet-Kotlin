@@ -10,7 +10,7 @@ import warhammer.dicelauncher.launch.launchHand
 import warhammer.dicelauncher.launch.launchHandForStatistics
 
 class ArtifactsValidationTest {
-    private val handFacade = HandFacade(PlayerSheetContext.DATABASE_URL, PlayerSheetContext.DRIVER)
+    private val handFacade = HandFacade(TEST_DATABASE_URL, TEST_DRIVER)
 
     @BeforeMethod
     fun clearDatabase() {
@@ -40,5 +40,11 @@ class ArtifactsValidationTest {
         val statisticsFor100FoundHand = launchHandForStatistics(foundHand!!, launchCount)
         assertThat(statisticsFor100FoundHand.successfulLaunchCount).isLessThanOrEqualTo(launchCount)
         assertThat(statisticsFor100FoundHand.averageSuccess).isGreaterThanOrEqualTo(1.0)
+    }
+
+    @Test
+    fun should_validate_context_values() {
+        assertThat(TEST_DATABASE_URL).isEqualTo("jdbc:sqlite:testSqlite:?mode=memory&cache=shared")
+        assertThat(TEST_DRIVER).isEqualTo("org.sqlite.JDBC")
     }
 }
