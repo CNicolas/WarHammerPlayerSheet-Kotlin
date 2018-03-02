@@ -3,10 +3,14 @@ package warhammer.playersheet.player
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
+import warhammer.database.HandFacade
 import warhammer.database.PlayerFacade
 import warhammer.database.entities.hand.DifficultyLevel
+import warhammer.database.entities.hand.Hand
 import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.enums.Characteristic.AGILITY
+import warhammer.database.entities.player.enums.Characteristic.FELLOWSHIP
 import warhammer.database.entities.player.extensions.addItem
 import warhammer.database.entities.player.extensions.addTalent
 import warhammer.database.entities.player.extensions.equipTalent
@@ -17,17 +21,20 @@ import warhammer.dicelauncher.launch.launch
 import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.playersheet.TEST_DATABASE_URL
 import warhammer.playersheet.TEST_DRIVER
+import warhammer.playersheet.extensions.createHand
 
 class ScenarioTest {
     private val facade = PlayerFacade(TEST_DATABASE_URL, TEST_DRIVER)
+    private val handFacade = HandFacade(TEST_DATABASE_URL, TEST_DRIVER)
 
     @BeforeMethod
     fun clearDatabase() {
         facade.deleteAll()
+        handFacade.deleteAll()
     }
 
     @Test
-    fun should_be_used() {
+    fun should_modify_a_player_and_launch_a_hand() {
         val player = facade.save(Player(name = "John"))
         assertThat(player).isNotNull()
 
@@ -86,9 +93,10 @@ class ScenarioTest {
         assertThat(updatedPlayer3.maxStress).isEqualTo(8)
         assertThat(updatedPlayer3.encumbrance).isEqualTo(5)
 
-        val initiative = player.agility.getHand("Initiative").launch()
+        val initiative = player.createHand(AGILITY, "Initiative").launch()
         assertThat(initiative.isSuccessful).isTrue()
-        val impossible = player.fellowship.getHand("Impossible", DifficultyLevel.GODLIKE).launchForStatistics(50)
+        val impossible = player.createHand(FELLOWSHIP, "Impossible", DifficultyLevel.GODLIKE)
+                .launchForStatistics(50)
         assertThat(impossible.successfulPercentage).isLessThan(70.0)
 
         val talent = facade.getAllTalents().first { it.name == "Ascétisme" }
@@ -97,5 +105,47 @@ class ScenarioTest {
         val updatedPlayer4 = facade.save(player)
         assertThat(updatedPlayer4.talents.size).isEqualTo(1)
         assertThat(updatedPlayer4.talents[0].isEquipped).isTrue()
+    }
+
+    @Test
+    fun should_use_dice_launcher_alone() {
+        val hand = Hand("default", 4, 1, 1, challengeDicesCount = 1)
+        assertThat(hand.launchForStatistics(100).successfulPercentage).isGreaterThanOrEqualTo(50.0)
+
+        hand.name = "Good charac"
+        handFacade.save(hand)
+
+        hand.misfortuneDicesCount = 2
+        assertThat(hand.launchForStatistics(100).successfulPercentage).isGreaterThanOrEqualTo(20.0)
+        hand.name = "Harder"
+        handFacade.add(hand)
+
+        val firstHand = handFacade.find("Good charac")
+        assertThat(firstHand).isNotNull()
+        assertThat(firstHand!!.characteristicDicesCount).isEqualTo(4)
+        assertThat(firstHand.expertiseDicesCount).isEqualTo(1)
+        assertThat(firstHand.fortuneDicesCount).isEqualTo(1)
+        assertThat(firstHand.challengeDicesCount).isEqualTo(1)
+        assertThat(firstHand.misfortuneDicesCount).isEqualTo(0)
+
+        val secondHand = handFacade.find("Harder")
+        assertThat(secondHand).isNotNull()
+        assertThat(secondHand!!.characteristicDicesCount).isEqualTo(4)
+        assertThat(secondHand.expertiseDicesCount).isEqualTo(1)
+        assertThat(secondHand.fortuneDicesCount).isEqualTo(1)
+        assertThat(secondHand.challengeDicesCount).isEqualTo(1)
+        assertThat(secondHand.misfortuneDicesCount).isEqualTo(2)
+
+        hand.expertiseDicesCount = 0
+        
+        val secondHand2 = handFacade.update(hand)
+        assertThat(handFacade.update(hand)?.expertiseDicesCount).isEqualTo(0)
+        assertThat(secondHand2).isNotNull()
+        assertThat(secondHand2!!.name).isEqualTo("Harder")
+        assertThat(secondHand2.characteristicDicesCount).isEqualTo(4)
+        assertThat(secondHand2.expertiseDicesCount).isEqualTo(0)
+        assertThat(secondHand2.fortuneDicesCount).isEqualTo(1)
+        assertThat(secondHand2.challengeDicesCount).isEqualTo(1)
+        assertThat(secondHand2.misfortuneDicesCount).isEqualTo(2)
     }
 }
