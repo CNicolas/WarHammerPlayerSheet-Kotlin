@@ -1,4 +1,4 @@
-package warhammer.playersheet.extensions.stressAndExhaustion
+package warhammer.playersheet.enums
 
 enum class StressState {
     NOT_STRESSED, STRESSED, FAINTED

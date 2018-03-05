@@ -1,8 +1,10 @@
-package warhammer.playersheet.extensions.stressAndExhaustion
+package warhammer.playersheet.extensions
 
 import warhammer.database.entities.player.Player
-import warhammer.playersheet.extensions.stressAndExhaustion.ExhaustionState.*
-import warhammer.playersheet.extensions.stressAndExhaustion.StressState.*
+import warhammer.playersheet.enums.ExhaustionState
+import warhammer.playersheet.enums.ExhaustionState.*
+import warhammer.playersheet.enums.StressState
+import warhammer.playersheet.enums.StressState.*
 
 // region STRESS
 

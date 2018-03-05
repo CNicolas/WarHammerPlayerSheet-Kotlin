@@ -4,9 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
-import warhammer.playersheet.extensions.stressAndExhaustion.*
-import warhammer.playersheet.extensions.stressAndExhaustion.ExhaustionState.*
-import warhammer.playersheet.extensions.stressAndExhaustion.StressState.*
+import warhammer.playersheet.enums.ExhaustionState.*
+import warhammer.playersheet.enums.StressState.*
 
 class StressAndExhaustionTest {
     @Test
