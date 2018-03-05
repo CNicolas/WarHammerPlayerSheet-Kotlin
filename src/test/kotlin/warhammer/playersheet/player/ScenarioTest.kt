@@ -11,12 +11,13 @@ import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic.AGILITY
 import warhammer.database.entities.player.enums.Characteristic.FELLOWSHIP
-import warhammer.database.entities.player.extensions.addItem
-import warhammer.database.entities.player.extensions.addTalent
-import warhammer.database.entities.player.extensions.equipTalent
 import warhammer.database.entities.player.playerLinked.item.Weapon
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
+import warhammer.database.extensions.items.addItem
+import warhammer.database.extensions.talents.addTalent
+import warhammer.database.extensions.talents.equipTalent
+import warhammer.database.staticData.getAllTalents
 import warhammer.dicelauncher.launch.launch
 import warhammer.dicelauncher.launch.launchForStatistics
 import warhammer.playersheet.TEST_DATABASE_URL
@@ -61,7 +62,13 @@ class ScenarioTest {
         assertThat(updatedPlayer1.maxStress).isEqualTo(8)
         assertThat(updatedPlayer1.encumbrance).isEqualTo(0)
 
-        player.addItem(Weapon(name = "Arc sylvain", damage = 5, criticalLevel = 3, quality = Quality.SUPERIOR, encumbrance = 5, range = Range.LONG, isEquipped = true))
+        player.addItem(Weapon(name = "Arc sylvain",
+                damage = 5,
+                criticalLevel = 3,
+                quality = Quality.SUPERIOR,
+                encumbrance = 5,
+                range = Range.LONG,
+                isEquipped = true))
 
         val updatedPlayer2 = facade.save(player)
         assertThat(updatedPlayer2.name).isEqualTo("John")
@@ -99,7 +106,7 @@ class ScenarioTest {
                 .launchForStatistics(50)
         assertThat(impossible.successfulPercentage).isLessThan(70.0)
 
-        val talent = facade.getAllTalents().first { it.name == "Ascétisme" }
+        val talent = getAllTalents().first { it.name == "Ascétisme" }
         player.addTalent(talent)
         player.equipTalent(talent)
         val updatedPlayer4 = facade.save(player)
@@ -137,7 +144,7 @@ class ScenarioTest {
         assertThat(secondHand.misfortuneDicesCount).isEqualTo(2)
 
         hand.expertiseDicesCount = 0
-        
+
         val secondHand2 = handFacade.update(hand)
         assertThat(handFacade.update(hand)?.expertiseDicesCount).isEqualTo(0)
         assertThat(secondHand2).isNotNull()

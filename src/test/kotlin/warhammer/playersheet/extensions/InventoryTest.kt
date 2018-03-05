@@ -3,10 +3,10 @@ package warhammer.playersheet.extensions
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.extensions.addItem
-import warhammer.database.entities.player.extensions.getExpandableByName
-import warhammer.database.entities.player.extensions.getWeaponByName
-import warhammer.database.entities.player.extensions.removeItem
+import warhammer.database.extensions.items.addItem
+import warhammer.database.extensions.items.getExpandableByName
+import warhammer.database.extensions.items.getWeaponByName
+import warhammer.database.extensions.items.removeItem
 import warhammer.database.entities.player.playerLinked.item.Expandable
 import warhammer.database.entities.player.playerLinked.item.Weapon
 

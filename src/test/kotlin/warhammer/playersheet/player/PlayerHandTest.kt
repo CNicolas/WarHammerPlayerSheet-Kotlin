@@ -8,7 +8,7 @@ import warhammer.database.entities.hand.DifficultyLevel.MEDIUM
 import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic
-import warhammer.database.entities.player.extensions.getSkillByName
+import warhammer.database.extensions.skills.getSkillByName
 import warhammer.playersheet.TEST_DATABASE_URL
 import warhammer.playersheet.TEST_DRIVER
 import warhammer.playersheet.extensions.createHand

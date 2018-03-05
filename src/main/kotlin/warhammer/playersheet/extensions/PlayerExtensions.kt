@@ -5,9 +5,9 @@ import warhammer.database.entities.hand.DifficultyLevel.NONE
 import warhammer.database.entities.hand.Hand
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic
-import warhammer.database.entities.player.extensions.getSpecializationByName
 import warhammer.database.entities.player.playerLinked.skill.Skill
 import warhammer.database.entities.player.playerLinked.skill.Specialization
+import warhammer.database.extensions.skills.getSpecializationByName
 import warhammer.playersheet.enums.PlayerLivingState
 
 fun Player.createHand(characteristic: Characteristic,
