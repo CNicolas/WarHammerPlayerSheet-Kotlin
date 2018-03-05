@@ -13,14 +13,14 @@ import warhammer.database.entities.player.playerLinked.item.Weapon
 class InventoryTest {
     @Test
     fun should_have_encumbrance_of_2() {
-        val player = Player(name = "PlayerName", items = mutableListOf(Weapon(name = "Baton", encumbrance = 2)))
+        val player = Player(name = "PlayerName", items = listOf(Weapon(name = "Baton", encumbrance = 2)))
 
         assertThat(player.encumbrance).isEqualTo(2)
     }
 
     @Test
     fun should_have_encumbrance_increased_when_adding_item() {
-        val player = Player(name = "PlayerName", items = mutableListOf(Weapon(name = "Baton", encumbrance = 2)))
+        val player = Player(name = "PlayerName", items = listOf(Weapon(name = "Baton", encumbrance = 2)))
 
         assertThat(player.items.size).isEqualTo(1)
         assertThat(player.encumbrance).isEqualTo(2)
