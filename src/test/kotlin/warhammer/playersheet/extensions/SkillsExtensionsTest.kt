@@ -12,7 +12,7 @@ class SkillsExtensionsTest {
         val strengthSkills = getAllSkills().findByCharacteristic(STRENGTH)
         assertThat(strengthSkills.size).isEqualTo(3)
 
-        val fightSkill = strengthSkills.findSkills("capacit")
+        val fightSkill = strengthSkills.findByText("capacit")
         assertThat(fightSkill.size).isEqualTo(1)
         assertThat(fightSkill[0].name).isEqualTo("Capacité de Combat")
 
@@ -22,20 +22,14 @@ class SkillsExtensionsTest {
     }
 
     @Test
-    fun should_find_skill_by_kotlin() {
-        val strengthSkills = getAllSkills().filter { it.characteristic == STRENGTH }
-        assertThat(strengthSkills.size).isEqualTo(3)
+    fun should_all_skills() {
+        val allSkills = findSkills()
+        assertThat(allSkills.size).isEqualTo(27)
+    }
 
-        val fightSkill = strengthSkills.filter { it.name.contains("capaci", true) }
-        assertThat(fightSkill.size).isEqualTo(1)
-        assertThat(fightSkill[0].name).isEqualTo("Capacité de Combat")
-
-        val oneTimeFilteredSkills = getAllSkills()
-                .filter {
-                    it.characteristic == AGILITY &&
-                            it.name.contains("caPAcité", true)
-                }
-        assertThat(oneTimeFilteredSkills.size).isEqualTo(1)
-        assertThat(oneTimeFilteredSkills[0].name).isEqualTo("Capacité de Tir")
+    @Test
+    fun should_not_find_skill() {
+        val emptySkills = findSkills("nothing")
+        assertThat(emptySkills).isEmpty()
     }
 }

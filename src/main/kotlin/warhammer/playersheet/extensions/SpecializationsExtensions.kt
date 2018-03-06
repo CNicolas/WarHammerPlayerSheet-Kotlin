@@ -21,9 +21,13 @@ fun findSpecializations(text: String? = null,
         filteredSkills = filteredSkills.findByText(skillName)
     }
     if (text != null) {
-        return filteredSkills.map { filteredSkill ->
-            filteredSkill to filteredSkill.specializations.findByText(text)
-        }.toMap()
+        return if (filteredSkills.any { it.specializations.findByText(text).isNotEmpty() }) {
+            filteredSkills.map { filteredSkill ->
+                filteredSkill to filteredSkill.specializations.findByText(text)
+            }.toMap()
+        } else {
+            mapOf()
+        }
     }
 
     return filteredSkills.map { filteredSkill ->

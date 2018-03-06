@@ -3,6 +3,7 @@ package warhammer.playersheet.extensions
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.player.playerLinked.talent.TalentCooldown.PASSIVE
+import warhammer.database.entities.player.playerLinked.talent.TalentCooldown.TALENT
 import warhammer.database.entities.player.playerLinked.talent.TalentType.AFFINITY
 import warhammer.database.extensions.talents.findByType
 import warhammer.database.staticData.getAllTalents
@@ -16,7 +17,7 @@ class TalentsExtensionsTest {
         val passiveAffinityTalents = passiveTalents.findByType(AFFINITY)
         assertThat(passiveAffinityTalents.size).isEqualTo(23)
 
-        val passiveAffinityAetherTalents = passiveAffinityTalents.findTalents("aéthérique")
+        val passiveAffinityAetherTalents = passiveAffinityTalents.findByText("aéthérique")
         assertThat(passiveAffinityAetherTalents.size).isEqualTo(2)
 
         val oneTimeFilteredTalents = findTalents("aéthérique", PASSIVE, AFFINITY)
@@ -24,26 +25,20 @@ class TalentsExtensionsTest {
     }
 
     @Test
-    fun should_find_talent_by_kotlin() {
-        val passiveTalents = getAllTalents().filter { it.cooldown == PASSIVE }
-        assertThat(passiveTalents.size).isEqualTo(84)
+    fun should_find_talents_with_cooldown() {
+        val exhaustibleTalents = getAllTalents().findByCooldown(TALENT)
+        assertThat(exhaustibleTalents.size).isEqualTo(22)
+    }
 
-        val passiveAffinityTalents = passiveTalents.filter { it.type == AFFINITY }
-        assertThat(passiveAffinityTalents.size).isEqualTo(23)
+    @Test
+    fun should_all_talents() {
+        val allTalents = findTalents()
+        assertThat(allTalents.size).isEqualTo(106)
+    }
 
-        val passiveAffinityAetherTalents = passiveAffinityTalents.filter {
-            it.name.contains("aéthérique", true) ||
-                    it.description.contains("aéthérique", true)
-        }
-        assertThat(passiveAffinityAetherTalents.size).isEqualTo(2)
-
-        val oneTimeFilteredTalents = getAllTalents()
-                .filter {
-                    it.cooldown == PASSIVE &&
-                            it.type == AFFINITY &&
-                            it.name.contains("aéthérique", true) ||
-                            it.description.contains("aéthérique", true)
-                }
-        assertThat(oneTimeFilteredTalents.size).isEqualTo(2)
+    @Test
+    fun should_not_find_talent() {
+        val emptyTalents = findTalents("nothing")
+        assertThat(emptyTalents).isEmpty()
     }
 }
