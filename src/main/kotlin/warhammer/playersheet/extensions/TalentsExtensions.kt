@@ -27,9 +27,7 @@ fun List<Talent>.findTalents(text: String? = null,
     }
 
     if (text != null) {
-        filteredTalents = filteredTalents.filter {
-            it.name.contains(text, true) || it.description.contains(text, true)
-        }
+        filteredTalents = filteredTalents.findByText(text)
     }
 
     return filteredTalents
@@ -39,3 +37,6 @@ fun List<Talent>.findByCooldown(talentCooldown: TalentCooldown) = when (talentCo
     PASSIVE -> filter { it.cooldown == PASSIVE }
     TALENT -> filter { it.cooldown == TALENT }
 }
+
+fun List<Talent>.findByText(text: String) =
+        filter { it.name.contains(text, true) || it.description.contains(text, true) }

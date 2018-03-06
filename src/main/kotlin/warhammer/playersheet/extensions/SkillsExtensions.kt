@@ -15,9 +15,7 @@ fun List<Skill>.findSkills(text: String? = null, characteristic: Characteristic?
     }
 
     if (text != null) {
-        filteredSkills = filteredSkills.filter {
-            it.name.contains(text, true)
-        }
+        filteredSkills = filteredSkills.findByText(text)
     }
 
     return filteredSkills
@@ -25,3 +23,6 @@ fun List<Skill>.findSkills(text: String? = null, characteristic: Characteristic?
 
 fun List<Skill>.findByCharacteristic(characteristic: Characteristic) =
         filter { it.characteristic == characteristic }
+
+fun List<Skill>.findByText(text: String) =
+        filter { it.name.contains(text, true) }
